@@ -1,0 +1,80 @@
+# Blender 3.3.0 Beta MTL File: 'spider.blend'
+# www.blender.org
+
+newmtl Antenna
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.042027 0.042027 0.042027
+Ks 0.111399 0.111399 0.111399
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+
+newmtl Body
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Ks E:/textures/green_metal_rust_spec_2k.jpg
+map_Ns E:/textures/green_metal_rust_rough_2k.jpg
+map_Bump -bm 1.000000 E:/textures/green_metal_rust_nor_gl_2k.jpg
+
+newmtl Carbon
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd E:/Carbon fiber 1_BaseColor.jpg
+map_Ks E:/Carbon fiber 1_Specular.jpg
+map_Ns E:/Carbon fiber 1_Roughness.jpg
+map_refl E:/Carbon fiber 1_Metallic.jpg
+map_Bump -bm 1.000000 E:/Carbon fiber 1_Normal.jpg
+
+newmtl DarkMetal
+Ns 128.275742
+Ka 1.000000 1.000000 1.000000
+Kd 0.035218 0.035218 0.035218
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+
+newmtl Eye
+Ns 864.996399
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+
+newmtl Metal
+Ns 410.492828
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+
+newmtl light
+Ns 864.996399
+Ka 1.000000 1.000000 1.000000
+Kd 0.318539 0.019968 0.018242
+Ks 1.000000 1.000000 1.000000
+Ke 3.678273 0.189651 0.036447
+Ni 1.450000
+d 1.000000
+illum 2
