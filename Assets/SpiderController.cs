@@ -7,11 +7,20 @@ using UnityEngine.UIElements;
 public class SpiderController : MonoBehaviour
 {
     [SerializeField] private float movingSpeed;
+    [SerializeField] private float rotationSpeed;
     [SerializeField] private List<Transform> legIkTargets;
     [SerializeField] private List<Transform> legIkSafezones;
     [SerializeField] private float ikSafezoneRadius;
+    [SerializeField] private float legTimingOffset;
+    [SerializeField] private float velocityMultiplier;
+    [SerializeField] private AnimationCurve legHeightAnimationCurve;
     private List<Vector3> legIkPositions;
-    private Vector3 _movement;
+    private Vector2 _movement;
+    private float previousMoveTime;
+    private int[] movingPattern = { 4, 2, 6, 0, 3, 5, 1, 7 };//{0,1,2,3,4,5,6,7,8};
+    private int currentPatternIndex = 0;
+    private Vector3 lastTransformPos;
+    private Vector3 velocity;
 
     private void Start()
     {
@@ -21,32 +30,66 @@ public class SpiderController : MonoBehaviour
         {
             legIkPositions.Add(legIkTargets[i].position);
         }
+
+        previousMoveTime = Time.time;
+        lastTransformPos = transform.position;
     }
 
     void Update()
     {
         _movement.x = Input.GetAxis("Horizontal");
-        _movement.z = Input.GetAxis("Vertical");
+        _movement.y = Input.GetAxis("Vertical");
     }
 
     private void FixedUpdate()
     {
-        //TODO: fix the mesh to fix y axis rotation of 180 degrees
-        transform.position += -_movement * (movingSpeed * Time.fixedDeltaTime);
+        velocity = transform.position - lastTransformPos;
+        
+        transform.RotateAround(transform.up,(rotationSpeed*_movement.x*Time.fixedDeltaTime));
+        transform.position += transform.forward * (_movement.y * movingSpeed * Time.fixedDeltaTime);
         UpdateLegs();
+        int legToMove = GetLegIndexToMove();
+        //pour chaque patte
+        //
+        lastTransformPos = transform.position;
+    }
+
+    private int GetLegIndexToMove()
+    {
+        float maxDist = ikSafezoneRadius;
+        int id = -1;
+        for (int i = 0; i < legIkTargets.Count; i++)
+        {
+            float dist =  Vector3.ProjectOnPlane(legIkSafezones[i].position + velocity * velocityMultiplier - legIkPositions[i], transform.up).magnitude;
+            if (dist > maxDist)
+            {
+                maxDist = dist;
+                id = i;
+            }
+        }
+        return id;
     }
 
     private void UpdateLegs()
     {
         for (int i = 0; i < legIkTargets.Count; i++)
         {
-            Vector3 safePos = legIkSafezones[i].position;
-            Vector3 targetPos = legIkTargets[i].position;
-            if ((safePos - targetPos).magnitude > ikSafezoneRadius)
+            if (movingPattern[currentPatternIndex] == i)
             {
-                legIkPositions[i] = safePos + -_movement.normalized * ikSafezoneRadius;
+                float elapsed = Time.time - previousMoveTime;
+                if (elapsed >= legTimingOffset)
+                {
+                    Vector3 safePos = legIkSafezones[i].position;
+                    Vector3 targetPos = legIkTargets[i].position;
+                    if ((safePos - targetPos).magnitude > ikSafezoneRadius)
+                    {
+                        previousMoveTime = Time.time;
+                        currentPatternIndex = (currentPatternIndex + 1) % 8;
+                        legIkPositions[i] = safePos + velocity.normalized * (ikSafezoneRadius * 2);
+                    }
+                }    
             }
-            legIkTargets[i].position = legIkPositions[i];
+            legIkTargets[i].position = legIkPositions[i];//locking the bone to the proper position
         }
     }
 
